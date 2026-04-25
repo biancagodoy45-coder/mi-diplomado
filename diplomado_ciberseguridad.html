@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diplomado en Ciberseguridad</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #fff0f5;
+    color: #3a1a26;
+    min-height: 100vh;
+  }
+
+  .cover {
+    background: linear-gradient(135deg, #f9a8c9 0%, #f472b6 40%, #e879a0 70%, #be185d 100%);
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 280px; height: 280px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 80px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+  }
+  .cover-emoji {
+    position: absolute;
+    bottom: 16px; left: 60px;
+    font-size: 64px;
+    line-height: 1;
+  }
+
+  .page-body {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 60px 4rem;
+  }
+
+  .page-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    color: #be185d;
+    margin: 1.4rem 0 0.3rem;
+    letter-spacing: -0.5px;
+  }
+  .page-subtitle {
+    font-size: 14px;
+    color: #c084a0;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1.5px solid #fce7f3;
+    margin: 1.6rem 0;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: #f472b6;
+    margin-bottom: 0.8rem;
+    margin-top: 1.8rem;
+  }
+
+  /* STATS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 1.2rem;
+  }
+  .stat-box {
+    background: white;
+    border: 1px solid #fce7f3;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: #be185d;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-lbl { font-size: 12px; color: #c084a0; }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: #fce7f3;
+    border-radius: 20px;
+    height: 10px;
+    margin: 0.5rem 0 1.2rem;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #f9a8c9, #ec4899);
+    border-radius: 20px;
+    transition: width 0.5s ease;
+  }
+
+  /* COURSES */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 0.5rem;
+  }
+  .course-btn {
+    background: white;
+    border: 1.5px solid #fbcfe8;
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .course-btn:hover {
+    border-color: #ec4899;
+    background: #fdf2f8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(236,72,153,0.12);
+  }
+  .course-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .course-info { flex: 1; }
+  .course-num {
+    font-size: 10px;
+    color: #ec4899;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .course-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #881337;
+    line-height: 1.35;
+    margin-top: 2px;
+  }
+  .course-status {
+    display: inline-block;
+    font-size: 10.5px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .status-done { background: #fce7f3; color: #be185d; }
+  .status-progress { background: #fff7ed; color: #c2410c; }
+  .status-pending { background: #f1f5f9; color: #64748b; }
+  .hint { font-size: 11.5px; color: #f9a8c9; margin-top: 6px; }
+
+  /* NOTES */
+  .note-block {
+    background: white;
+    border: 1px solid #fce7f3;
+    border-left: 3.5px solid #ec4899;
+    border-radius: 0 12px 12px 0;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .note-block.empty { border-left-color: #fbcfe8; background: #fffbfe; }
+  .note-course {
+    font-size: 11.5px;
+    color: #f472b6;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  .note-course.empty { color: #f9a8c9; }
+  .note-text { font-size: 13.5px; color: #5b2038; line-height: 1.65; }
+  .note-text.empty { color: #e8b4c8; font-style: italic; }
+
+  /* TWO COLS */
+  .two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* CARDS */
+  .info-card {
+    background: white;
+    border: 1px solid #fce7f3;
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .card-head {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 12px;
+  }
+  .card-icon { font-size: 16px; }
+  .card-title { font-size: 14px; font-weight: 500; color: #9d174d; }
+
+  /* TAGS */
+  .tags-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag {
+    background: #fdf2f8;
+    border: 1px solid #fbcfe8;
+    color: #be185d;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .tag-add {
+    background: transparent;
+    border: 1px dashed #f9a8c9;
+    color: #f472b6;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tag-add:hover { background: #fdf2f8; }
+
+  /* SOFTWARE */
+  .sw-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sw-chip {
+    background: #fdf2f8;
+    border: 1px solid #fbcfe8;
+    border-radius: 8px;
+    padding: 7px 13px;
+    font-size: 13px;
+    color: #9d174d;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sw-dot { width: 7px; height: 7px; background: #ec4899; border-radius: 50%; flex-shrink: 0; }
+
+  .add-btn {
+    background: transparent;
+    border: 1.5px dashed #fbcfe8;
+    border-radius: 8px;
+    color: #f472b6;
+    font-size: 12.5px;
+    padding: 7px 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-family: 'DM Sans', sans-serif;
+    display: inline-block;
+  }
+  .add-btn:hover { background: #fdf2f8; }
+
+  /* GLOSSARY */
+  .glossary-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid #fce7f3;
+    align-items: start;
+    font-size: 13.5px;
+  }
+  .glossary-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .glossary-term { font-weight: 500; color: #be185d; }
+  .glossary-def { color: #6b374f; line-height: 1.55; }
+  .glossary-term.empty, .glossary-def.empty { color: #f9a8c9; font-style: italic; }
+
+  /* HIGHLIGHTS */
+  .highlight-card {
+    background: linear-gradient(135deg, #fdf2f8, #fff0f5);
+    border: 1px solid #fbcfe8;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .highlight-star { font-size: 15px; flex-shrink: 0; margin-top: 2px; }
+  .highlight-text { font-size: 13.5px; color: #5b2038; line-height: 1.65; }
+
+  /* IMAGES */
+  .img-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .img-placeholder {
+    background: #fdf2f8;
+    border: 1.5px dashed #fbcfe8;
+    border-radius: 12px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 24px;
+    color: #f9a8c9;
+    gap: 5px;
+    transition: all 0.15s;
+  }
+  .img-placeholder:hover { border-color: #ec4899; background: #fce7f3; }
+  .img-placeholder span { font-size: 12px; color: #f472b6; }
+
+  /* DATOS */
+  .footer-note {
+    font-size: 12px;
+    color: #f9a8c9;
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  /* EDITABLE */
+  [data-editable] { cursor: text; }
+  [data-editable]:hover { background: #fff0f5; border-radius: 4px; }
+  [data-editable]:focus {
+    outline: none;
+    background: #fce7f3;
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(190,24,93,0.08);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border: 1.5px solid #fbcfe8;
+    border-radius: 16px;
+    padding: 28px 32px;
+    width: 420px;
+    box-shadow: 0 20px 60px rgba(190,24,93,0.12);
+  }
+  .modal h3 { font-size: 16px; color: #9d174d; margin-bottom: 14px; font-weight: 500; }
+  .modal input, .modal textarea {
+    width: 100%;
+    border: 1.5px solid #fbcfe8;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    color: #3a1a26;
+    margin-bottom: 10px;
+    outline: none;
+  }
+  .modal input:focus, .modal textarea:focus { border-color: #ec4899; }
+  .modal textarea { height: 80px; resize: vertical; }
+  .modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+  .btn-cancel {
+    background: transparent; border: 1px solid #fbcfe8;
+    color: #c084a0; border-radius: 8px;
+    padding: 7px 18px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+  }
+  .btn-ok {
+    background: #ec4899; border: none;
+    color: white; border-radius: 8px;
+    padding: 7px 18px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  }
+  .btn-cancel:hover { background: #fdf2f8; }
+  .btn-ok:hover { background: #db2777; }
+
+  @media (max-width: 800px) {
+    .page-body { padding: 0 24px 3rem; }
+    .courses-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .two-cols { grid-template-columns: 1fr; }
+    .img-grid { grid-template-columns: repeat(2, 1fr); }
+    .page-title { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Agregar</h3>
+    <input type="text" id="modal-input" placeholder="" style="display:none;">
+    <textarea id="modal-textarea" placeholder="" style="display:none;"></textarea>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-ok" onclick="confirmModal()">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<div class="cover">
+  <div class="cover-emoji">🔐</div>
+</div>
+
+<div class="page-body">
+  <h1 class="page-title">Diplomado en Ciberseguridad</h1>
+  <p class="page-subtitle">Mi cuaderno personal · 7 cursos · Iniciado 2025</p>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-num">7</span>
+      <span class="stat-lbl">Cursos totales</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="done-count">0</span>
+      <span class="stat-lbl">Completados</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="kw-count">8</span>
+      <span class="stat-lbl">Palabras clave</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="sw-count">6</span>
+      <span class="stat-lbl">Softwares</span>
+    </div>
+  </div>
+
+  <div class="section-label">Progreso del diplomado</div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="prog-bar" style="width:0%"></div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CURSOS -->
+  <div class="section-label">Acceso directo a los 7 cursos</div>
+  <div class="courses-grid">
+    <a class="course-btn" href="#" onclick="toggleStatus(this,1);return false;">
+      <div class="course-icon">🎓</div>
+      <div class="course-info">
+        <div class="course-num">Curso 1</div>
+        <div class="course-name">Seminario de preparación para la certificación internacional I</div>
+        <span class="course-status status-pending" id="s1">Pendiente</span>
+      </div>
+    </a>
+    <a class="course-btn" href="#" onclick="toggleStatus(this,2);return false;">
+      <div class="course-icon">🎓</div>
+      <div class="course-info">
+        <div class="course-num">Curso 2</div>
+        <div class="course-name">Seminario de preparación para la certificación internacional II</div>
+        <span class="course-status status-pending" id="s2">Pendiente</span>
+      </div>
+    </a>
+    <a class="course-btn" href="#" onclick="toggleStatus(this,3);return false;">
+      <div class="course-icon">📡</div>
+      <div class="course-info">
+        <div class="course-num">Curso 3</div>
+        <div class="course-name">Planificación y monitoreo continuo de la ciberseguridad</div>
+        <span class="course-status status-pending" id="s3">Pendiente</span>
+      </div>
+    </a>
+    <a class="course-btn" href="#" onclick="toggleStatus(this,4);return false;">
+      <div class="course-icon">🛠️</div>
+      <div class="course-info">
+        <div class="course-num">Curso 4</div>
+        <div class="course-name">Técnicas y herramientas de Ciberseguridad avanzada parte I</div>
+        <span class="course-status status-pending" id="s4">Pendiente</span>
+      </div>
+    </a>
+    <a class="course-btn" href="#" onclick="toggleStatus(this,5);return false;">
+      <div class="course-icon">🔧</div>
+      <div class="course-info">
+        <div class="course-num">Curso 5</div>
+        <div class="course-name">Técnicas y herramientas de Ciberseguridad avanzada parte II</div>
+        <span class="course-status status-pending" id="s5">Pendiente</span>
+      </div>
+    </a>
+    <a class="course-btn" href="#" onclick="toggleStatus(this,6);return false;">
+      <div class="course-icon">⚙️</div>
+      <div class="course-info">
+        <div class="course-num">Curso 6</div>
+        <div class="course-name">Técnicas y herramientas de ciberseguridad avanzada parte III</div>
+        <span class="course-status status-pending" id="s6">Pendiente</span>
+      </div>
+    </a>
+    <a class="course-btn" href="#" onclick="toggleStatus(this,7);return false;">
+      <div class="course-icon">💻</div>
+      <div class="course-info">
+        <div class="course-num">Curso 7</div>
+        <div class="course-name">Taller TI — Tecnologías de la información y Tecnologías de operación</div>
+        <span class="course-status status-pending" id="s7">Pendiente</span>
+      </div>
+    </a>
+  </div>
+  <p class="hint">Haz clic en un curso para cambiar su estado: pendiente → en progreso → completado</p>
+
+  <hr class="divider">
+
+  <!-- APUNTES -->
+  <div class="section-label">Apuntes por curso</div>
+  <div id="notes-container">
+    <div class="note-block">
+      <div class="note-course">Curso 1 — Fundamentos</div>
+      <div class="note-text" contenteditable="true">La tríada CIA (Confidencialidad, Integridad y Disponibilidad) es el pilar central de la seguridad de la información. Todo control de seguridad debe evaluarse frente a estos tres principios.</div>
+    </div>
+    <div class="note-block">
+      <div class="note-course">Curso 2 — Redes</div>
+      <div class="note-text" contenteditable="true">El modelo OSI tiene 7 capas. Los ataques pueden ocurrir en cualquier capa. Los firewalls operan principalmente en capa 3-4, los WAF en capa 7.</div>
+    </div>
+  </div>
+  <button class="add-btn" onclick="openModal('note')">+ agregar apunte</button>
+
+  <hr class="divider">
+
+  <!-- PALABRAS CLAVE + SOFTWARES -->
+  <div class="two-cols">
+    <div class="info-card">
+      <div class="card-head">
+        <span class="card-icon">🏷️</span>
+        <span class="card-title">Palabras clave</span>
+      </div>
+      <div class="tags-wrap" id="tags-wrap">
+        <span class="tag">Firewall</span>
+        <span class="tag">VPN</span>
+        <span class="tag">Zero Trust</span>
+        <span class="tag">SIEM</span>
+        <span class="tag">Phishing</span>
+        <span class="tag">Malware</span>
+        <span class="tag">SOC</span>
+        <span class="tag">Pentesting</span>
+        <button class="tag-add" onclick="openModal('tag')">+ añadir</button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-head">
+        <span class="card-icon">🛠️</span>
+        <span class="card-title">Softwares del diplomado</span>
+      </div>
+      <div class="sw-list" id="sw-list">
+        <div class="sw-chip"><div class="sw-dot"></div>Wireshark</div>
+        <div class="sw-chip"><div class="sw-dot"></div>Nmap</div>
+        <div class="sw-chip"><div class="sw-dot"></div>Metasploit</div>
+        <div class="sw-chip"><div class="sw-dot"></div>Kali Linux</div>
+        <div class="sw-chip"><div class="sw-dot"></div>Burp Suite</div>
+        <div class="sw-chip"><div class="sw-dot"></div>Nessus</div>
+      </div>
+      <button class="add-btn" onclick="openModal('sw')">+ agregar software</button>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- GLOSARIO -->
+  <div class="section-label">Glosario — Significado de conceptos clave</div>
+  <div class="info-card">
+    <div id="glossary-container">
+      <div class="glossary-item">
+        <span class="glossary-term" contenteditable="true">Zero Trust</span>
+        <span class="glossary-def" contenteditable="true">Modelo de seguridad que no confía en ningún usuario o dispositivo por defecto, requiere verificación continua.</span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-term" contenteditable="true">SOC</span>
+        <span class="glossary-def" contenteditable="true">Security Operations Center — equipo que monitorea, detecta y responde a incidentes de seguridad en tiempo real.</span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-term" contenteditable="true">CVE</span>
+        <span class="glossary-def" contenteditable="true">Common Vulnerabilities and Exposures — sistema de identificación pública de vulnerabilidades conocidas.</span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-term" contenteditable="true">SIEM</span>
+        <span class="glossary-def" contenteditable="true">Security Information and Event Management — plataforma que centraliza y analiza logs de seguridad.</span>
+      </div>
+      <div class="glossary-item">
+        <span class="glossary-term" contenteditable="true">DDoS</span>
+        <span class="glossary-def" contenteditable="true">Distributed Denial of Service — ataque que busca saturar un sistema o red con tráfico masivo para dejarlo inoperante.</span>
+      </div>
+    </div>
+    <button class="add-btn" onclick="openModal('gloss')">+ agregar término</button>
+  </div>
+
+  <hr class="divider">
+
+  <!-- LO MÁS IMPORTANTE -->
+  <div class="section-label">Lo más importante del curso</div>
+  <div id="highlights-container">
+    <div class="highlight-card">
+      <span class="highlight-star">⭐</span>
+      <span class="highlight-text" contenteditable="true">La seguridad no es un producto, es un proceso continuo. La postura de seguridad de una organización debe adaptarse constantemente a nuevas amenazas.</span>
+    </div>
+    <div class="highlight-card">
+      <span class="highlight-star">⭐</span>
+      <span class="highlight-text" contenteditable="true">El eslabón más débil en ciberseguridad es el factor humano. La ingeniería social y el phishing explotan errores humanos, no técnicos.</span>
+    </div>
+    <div class="highlight-card">
+      <span class="highlight-star">⭐</span>
+      <span class="highlight-text" contenteditable="true">Principio de mínimo privilegio: cada usuario, sistema o proceso debe tener únicamente los permisos necesarios para su función.</span>
+    </div>
+  </div>
+  <button class="add-btn" onclick="openModal('highlight')">+ agregar punto importante</button>
+
+  <hr class="divider">
+
+  <!-- LO APRENDIDO -->
+  <div class="section-label">Lo que aprendí</div>
+  <div class="two-cols">
+    <div class="info-card">
+      <div class="card-head">
+        <span class="card-icon">💡</span>
+        <span class="card-title">Habilidades técnicas</span>
+      </div>
+      <div class="tags-wrap" id="skills-wrap">
+        <span class="tag">Análisis de tráfico</span>
+        <span class="tag">Escaneo de puertos</span>
+        <span class="tag">Evaluación de riesgos</span>
+        <span class="tag">Análisis forense</span>
+        <button class="tag-add" onclick="openModal('skill')">+ añadir</button>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="card-head">
+        <span class="card-icon">🧠</span>
+        <span class="card-title">Conceptos dominados</span>
+      </div>
+      <div class="tags-wrap" id="concepts-wrap">
+        <span class="tag">Modelo OSI</span>
+        <span class="tag">Tríada CIA</span>
+        <span class="tag">Criptografía asimétrica</span>
+        <span class="tag">Zero Trust</span>
+        <button class="tag-add" onclick="openModal('concept')">+ añadir</button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- IMÁGENES -->
+  <div class="section-label">Imágenes y capturas</div>
+  <div class="img-grid" id="img-grid">
+    <label class="img-placeholder" style="cursor:pointer;">
+      <input type="file" accept="image/*" style="display:none;" onchange="loadImage(this)">
+      📷<span>+ imagen</span>
+    </label>
+    <label class="img-placeholder" style="cursor:pointer;">
+      <input type="file" accept="image/*" style="display:none;" onchange="loadImage(this)">
+      🗺️<span>+ mapa conceptual</span>
+    </label>
+    <label class="img-placeholder" style="cursor:pointer;">
+      <input type="file" accept="image/*" style="display:none;" onchange="loadImage(this)">
+      📊<span>+ diagrama</span>
+    </label>
+    <label class="img-placeholder" style="cursor:pointer;">
+      <input type="file" accept="image/*" style="display:none;" onchange="loadImage(this)">
+      🖼️<span>+ captura</span>
+    </label>
+  </div>
+
+  <hr class="divider">
+
+  <!-- DATOS IMPORTANTES -->
+  <div class="section-label">Datos importantes del diplomado</div>
+  <div class="info-card">
+    <div class="glossary-item">
+      <span class="glossary-term">Institución</span>
+      <span class="glossary-def" contenteditable="true" data-editable>Nombre de la institución...</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-term">Duración</span>
+      <span class="glossary-def" contenteditable="true" data-editable>Ej: 6 meses</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-term">Modalidad</span>
+      <span class="glossary-def" contenteditable="true" data-editable>Online / Presencial / Híbrido</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-term">Plataforma</span>
+      <span class="glossary-def" contenteditable="true" data-editable>Ej: Coursera, edX, Udemy...</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-term">Certificación</span>
+      <span class="glossary-def" contenteditable="true" data-editable>Nombre del certificado...</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-term">Fecha inicio</span>
+      <span class="glossary-def" contenteditable="true" data-editable>DD/MM/AAAA</span>
+    </div>
+    <div class="glossary-item" style="border-bottom:none;padding-bottom:0;">
+      <span class="glossary-term">Fecha fin</span>
+      <span class="glossary-def" contenteditable="true" data-editable>DD/MM/AAAA</span>
+    </div>
+  </div>
+
+  <p class="footer-note">Haz clic en cualquier texto para editarlo · Tus cambios se mantienen mientras no cierres el navegador 🌸</p>
+</div>
+
+<script>
+  const states = {};
+  const stateCycles = [
+    {label:'Pendiente', cls:'status-pending'},
+    {label:'En progreso', cls:'status-progress'},
+    {label:'Completado', cls:'status-done'}
+  ];
+
+  function toggleStatus(btn, n) {
+    if (!states[n]) states[n] = 0;
+    states[n] = (states[n] + 1) % 3;
+    const s = stateCycles[states[n]];
+    const el = document.getElementById('s' + n);
+    el.textContent = s.label;
+    el.className = 'course-status ' + s.cls;
+    updateProgress();
+  }
+
+  function updateProgress() {
+    let done = 0;
+    for (let i = 1; i <= 7; i++) { if (states[i] === 2) done++; }
+    document.getElementById('done-count').textContent = done;
+    document.getElementById('prog-bar').style.width = Math.round((done / 7) * 100) + '%';
+  }
+
+  // MODAL SYSTEM
+  let currentModalType = '';
+
+  function openModal(type) {
+    currentModalType = type;
+    const modal = document.getElementById('modal');
+    const title = document.getElementById('modal-title');
+    const inp = document.getElementById('modal-input');
+    const ta = document.getElementById('modal-textarea');
+    inp.style.display = 'none';
+    ta.style.display = 'none';
+    inp.value = ''; ta.value = '';
+
+    const config = {
+      tag:       { title: 'Nueva palabra clave',       inp: true,  ph: 'Ej: Ransomware' },
+      sw:        { title: 'Nuevo software',            inp: true,  ph: 'Ej: Splunk' },
+      skill:     { title: 'Nueva habilidad técnica',   inp: true,  ph: 'Ej: Hardening de servidores' },
+      concept:   { title: 'Nuevo concepto dominado',   inp: true,  ph: 'Ej: Modelo Kill Chain' },
+      highlight: { title: 'Punto importante',          ta: true,   ph: 'Escribe el punto importante...' },
+      note:      { title: 'Nuevo apunte',              ta: true,   ph: 'Escribe tu apunte aquí...' },
+      gloss:     { title: 'Nuevo término del glosario',inp: true,  ph: 'Término (Ej: IDS)' },
+    };
+
+    const c = config[type];
+    title.textContent = c.title;
+    if (c.inp) { inp.placeholder = c.ph; inp.style.display = 'block'; setTimeout(()=>inp.focus(),100); }
+    if (c.ta)  { ta.placeholder = c.ph; ta.style.display = 'block'; setTimeout(()=>ta.focus(),100); }
+    if (type === 'gloss') {
+      ta.placeholder = 'Definición...';
+      ta.style.display = 'block';
+    }
+    modal.classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('show');
+  }
+
+  function confirmModal() {
+    const inp = document.getElementById('modal-input').value.trim();
+    const ta  = document.getElementById('modal-textarea').value.trim();
+
+    if (currentModalType === 'tag' && inp) {
+      const wrap = document.getElementById('tags-wrap');
+      const t = document.createElement('span'); t.className = 'tag'; t.textContent = inp;
+      wrap.insertBefore(t, wrap.querySelector('.tag-add'));
+      document.getElementById('kw-count').textContent = parseInt(document.getElementById('kw-count').textContent) + 1;
+    }
+    else if (currentModalType === 'sw' && inp) {
+      const list = document.getElementById('sw-list');
+      const chip = document.createElement('div'); chip.className = 'sw-chip';
+      chip.innerHTML = '<div class="sw-dot"></div>' + inp;
+      list.appendChild(chip);
+      document.getElementById('sw-count').textContent = parseInt(document.getElementById('sw-count').textContent) + 1;
+    }
+    else if (currentModalType === 'skill' && inp) {
+      const wrap = document.getElementById('skills-wrap');
+      const t = document.createElement('span'); t.className = 'tag'; t.textContent = inp;
+      wrap.insertBefore(t, wrap.querySelector('.tag-add'));
+    }
+    else if (currentModalType === 'concept' && inp) {
+      const wrap = document.getElementById('concepts-wrap');
+      const t = document.createElement('span'); t.className = 'tag'; t.textContent = inp;
+      wrap.insertBefore(t, wrap.querySelector('.tag-add'));
+    }
+    else if (currentModalType === 'highlight' && ta) {
+      const container = document.getElementById('highlights-container');
+      const card = document.createElement('div'); card.className = 'highlight-card';
+      card.innerHTML = '<span class="highlight-star">⭐</span><span class="highlight-text" contenteditable="true">' + ta + '</span>';
+      container.appendChild(card);
+    }
+    else if (currentModalType === 'note' && ta) {
+      const container = document.getElementById('notes-container');
+      const note = document.createElement('div'); note.className = 'note-block';
+      note.innerHTML = '<div class="note-course" contenteditable="true">Nuevo apunte</div><div class="note-text" contenteditable="true">' + ta + '</div>';
+      container.appendChild(note);
+    }
+    else if (currentModalType === 'gloss' && inp) {
+      const container = document.getElementById('glossary-container');
+      const row = document.createElement('div'); row.className = 'glossary-item';
+      const def = ta || '—';
+      row.innerHTML = '<span class="glossary-term" contenteditable="true">' + inp + '</span><span class="glossary-def" contenteditable="true">' + def + '</span>';
+      container.appendChild(row);
+    }
+
+    closeModal();
+  }
+
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // IMAGE UPLOAD
+  function loadImage(input) {
+    if (!input.files || !input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const label = input.closest('label');
+      label.style.background = 'none';
+      label.style.border = '1px solid #fbcfe8';
+      label.style.padding = '0';
+      label.style.overflow = 'hidden';
+      label.innerHTML = '<img src="' + e.target.result + '" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+</script>
+</body>
+</html>
